@@ -21,16 +21,22 @@ class CustomLightBrightnessRow extends LitElement {
 			width: '30px',
 			height: '30px',
 			lowBrightness: 43,
+			lowmedBrightness: 100,
 			medBrightness: 128,
+			medhiBrightness, 200,
 			hiBrightness: 213,
 			isOffColor: '#f44c09',
 			isOnLowColor: '#43A047',
+			isOnLowMedColor: '#43A047',
 			isOnMedColor: '#43A047',
+			isOnMedHiColor: '#43A047',
 			isOnHiColor: '#43A047',
 			buttonInactiveColor: '#759aaa',
 			customOffText: 'OFF',
 			customLowText: 'LOW',
+			custonLowMedText: 'LOWMED',
 			customMedText: 'MED',
+			custonMedHiText: 'MEDHI',
 			customHiText: 'HIGH',
 		};
 	}
@@ -41,26 +47,36 @@ class CustomLightBrightnessRow extends LitElement {
 			_config: Object,
 			_stateObj: Object,
 			_lowSP: Number,
+			_lowmedSP: Number,
 			_medSP: Number,
+			_medhighSP: Number,
 			_highSP: Number,
 			_width: String,
 			_height: String,
-			_leftColor: String,
-			_midLeftColor: String,
-			_midRightColor: String,
-			_rightColor: String,
-			_leftText: String,
-			_midLeftText: String,
-			_midRightText: String,
-			_rightText: String,
-			_leftName: String,
-			_midLeftName: String,
-			_midRightName: String,
-			_rightName: String,
-			_leftState: Boolean,
-			_midLeftState: Boolean,
-			_midRightState: Boolean,
-			_rightState: Boolean,
+			_lowColor: String,
+			_lowmedColor: String,
+			_medColor: String,
+			_medhiColor: String,
+			_hiColor: String,
+			_offColor: String,
+			_lowText: String,
+			_lowmedText: String,
+			_medText: String,
+			_medhiText: String,
+			_hiText: String,
+			_offText: String,
+			_lowName: String,
+			_lowmedName: String,
+			_medName: String,
+			_medhiName: String,
+			_hiName: String,
+			_offName: String,
+			_lowState: Boolean,
+			_medlowState: Boolean,
+			_medState: Boolean,
+			_medhighState: Boolean,
+			_highState: Boolean,
+			_offState: Boolean,
 		};
 	}
 
@@ -95,28 +111,40 @@ class CustomLightBrightnessRow extends LitElement {
 				<div id='button-container' class='box'>
 					<button
 						class='brightness'
-						style='${this._leftColor};min-width:${this._width};max-width:${this._width};height:${this._height}'
-						toggles name="${this._leftName}"
+						style='${this._lowColor};min-width:${this._width};max-width:${this._width};height:${this._height}'
+						toggles name="${this._lowName}"
 						@click=${this.setBrightness}
-						.disabled=${this._leftState}>${this._leftText}</button>
+						.disabled=${this._lowState}>${this._lowText}</button>
+      					<button
+						class='brightness'
+						style='${this._lowmedColor};min-width:${this._width};max-width:${this._width};height:${this._height}'
+						toggles name="${this._lowmedName}"
+						@click=${this.setBrightness}
+						.disabled=${this._lowmedState}>${this._lowmedText}</button>
+      					<button
+						class='brightness'
+						style='${this._medColor};min-width:${this._width};max-width:${this._width};height:${this._height}'
+						toggles name="${this._medName}"
+						@click=${this.setBrightness}
+						.disabled=${this._medState}>${this._medText}</button>
 					<button
 						class='brightness'
-						style='${this._midLeftColor};min-width:${this._width};max-width:${this._width};height:${this._height}'
-						toggles name="${this._midLeftName}"
+						style='${this._medhiColor};min-width:${this._width};max-width:${this._width};height:${this._height}'
+						toggles name="${this._medhiName}"
 						@click=${this.setBrightness}
-						.disabled=${this._midLeftState}>${this._midLeftText}</button>
+						.disabled=${this._medhiState}>${this._medhiText}</button>
 					<button
 						class='brightness'
-						style='${this._midRightColor};min-width:${this._width};max-width:${this._width};height:${this._height}'
-						toggles name="${this._midRightName}"
+						style='${this._hiColor};min-width:${this._width};max-width:${this._width};height:${this._height}'
+						toggles name="${this._hiName}"
 						@click=${this.setBrightness}
-						.disabled=${this._midRightState}>${this._midRightText}</button>
+						.disabled=${this._hiState}>${this._hiText}</button>
 					<button
 						class='brightness'
-						style='${this._rightColor};min-width:${this._width};max-width:${this._width};height:${this._height}'
-						toggles name="${this._rightName}"
+						style='${this._offColor};min-width:${this._width};max-width:${this._width};height:${this._height}'
+						toggles name="${this._offName}"
 						@click=${this.setBrightness}
-						.disabled=${this._rightState}>${this._rightText}</button>
+						.disabled=${this._offState}>${this._offText}</button>
 				</div>
 			</hui-generic-entity-row>
 		`;
@@ -147,24 +175,34 @@ class CustomLightBrightnessRow extends LitElement {
 		const buttonWidth = config.width;
 		const buttonHeight = config.height;
 		const OnLowClr = config.isOnLowColor;
+		const OnLowMedClr = config.isOnLowMedColor;
 		const OnMedClr = config.isOnMedColor;
+		const OnMedHiClr = config.isOnMedHiColor;
 		const OnHiClr = config.isOnHiColor;
 		const OffClr = config.isOffColor;
 		const buttonOffClr = config.buttonInactiveColor;
 		const LowSetpoint = config.lowBrightness;
+		const LowMedSetpoint = config.lowmedBrightness;
 		const MedSetpoint = config.medBrightness;
+		const MedHiSetpoint = config.medhiBrightness;
 		const HiSetpoint = config.hiBrightness;
 		const custOffTxt = config.customOffText;
 		const custLowTxt = config.customLowText;
+		const custLowMedTxt = config.customLowMedText;
 		const custMedTxt = config.customMedText;
+		const custMedHiTxt = config.custonMedHiText;
 		const custHiTxt = config.customHiText;
 						
 		
 		let lowSetpoint;
+		let lowmedSetpoint;
 		let medSetpoint;
+		let medhiSetpoint;
 		let hiSetpoint;
 		let low;
+		let lowmed;
 		let med;
+		let medhi;
 		let high;
 		let offstate;
 		
